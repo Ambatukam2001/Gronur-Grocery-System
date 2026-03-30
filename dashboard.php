@@ -1,0 +1,127 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.html");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gronur Grocery System</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div id="app-container">
+    <nav class="navbar">
+      <p id="tagname" style="display:flex; align-items:center; gap:10px">🛒 Gronur</p>
+      <a href="logout.php">Logout</a>
+    </nav>
+
+    <div id="main-content">
+      <div style="display:flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px;">
+        <div>
+          <h1>Daily<br>Grocery Food</h1>
+          <p style="font-size: 18px; color: var(--text-muted); margin:0; max-width: 600px; line-height: 1.6;">Bringing the world's freshest organic produce and essentials directly to your kitchen every day.</p>
+        </div>
+        <button id="addProductBtn" style="background: var(--primary); color: white; border: none; padding: 14px 24px; border-radius: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">+</span> Add Product
+        </button>
+      </div>
+      
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search fresh food...">
+        <button id="searchBtn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5c0-3.59-2.91-6.5-6.5-6.5S3 5.91 3 9.5s2.91 6.5 6.5 6.5c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sort-container">
+        <label for="sort-options">Sort By:</label>
+        <select id="sort-options">
+          <option value="">Default Order</option>
+          <option value="name">Product Name</option>
+          <option value="price-asc">Price (Lowest First)</option>
+          <option value="price-desc">Price (Highest First)</option>
+          <option value="category">Category Type</option>
+        </select>
+      </div>
+
+      <div id="items-container" class="grocery-items">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <div id="edit-form-container" class="hidden">
+        <div id="editModal">
+          <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+             <h2 id="modalTitle" style="margin:0">Edit Product</h2>
+             <span id="closeModalIcon" style="font-size:32px; cursor:pointer; color:var(--text-muted); line-height:1">&times;</span>
+          </div>
+          <form id="editForm">
+            <div class="edit-form-grid">
+              <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" id="editName" placeholder="e.g. Red Apples" required>
+              </div>
+              <div class="form-group">
+                <label>Brand</label>
+                <input type="text" id="editBrand" placeholder="Brand Name">
+              </div>
+              <div class="form-group">
+                <label>Price (₱)</label>
+                <input type="number" id="editPrice" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label>Weight / Volume</label>
+                <input type="text" id="editWeight" placeholder="e.g. 1kg or 500ml">
+              </div>
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" id="editQuantity">
+              </div>
+              <div class="form-group">
+                <label>Store</label>
+                <input type="text" id="editStore">
+              </div>
+              <div class="form-group full-width">
+                <label>Category</label>
+                <input type="text" id="editCategory">
+              </div>
+              <div class="form-group full-width">
+                <label>Product Image</label>
+                <input type="file" id="editImage" accept="image/*">
+              </div>
+            </div>
+            <button class="submitBtn" type="submit">Save Changes</button>
+            <button type="button" id="cancelEditBtn" class="cancel-btn">Cancel</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="cart">
+        <h3>My Cart</h3>
+        <ul id="cart-items"></ul>
+        <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+          <p style="margin:0; font-size:16px">Total: <span id="cart-total">0.00</span></p>
+          <button id="checkoutBtn">
+             Checkout
+             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path d="M16.01 11H4v2h12.01v3L20 12l-3.99-4v3z"/>
+             </svg>
+          </button>
+        </div>
+        <div id="checkout-message" class="hidden">
+          <p style="text-align:center; color: #4caf50; font-weight:600; margin-top:10px">Purchase completed!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
