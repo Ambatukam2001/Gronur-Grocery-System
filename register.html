@@ -20,10 +20,11 @@
         <h1>Create Account</h1>
         <p>Start your fresh journey with us today.</p>
         
-        <form action="register.php" method="post">
-          <input type="email" placeholder="Email Address" name="email" id="email" required>
-          <input type="text" placeholder="Username" name="uname" id="uname" required>
-          <input type="password" placeholder="Create Password" name="psw" id="psw" required>
+        <form id="registerForm">
+          <input type="email" placeholder="Email Address" id="email" required>
+          <input type="text" placeholder="Username" id="uname" required>
+          <input type="password" placeholder="Create Password" id="psw" required>
+          <input type="password" placeholder="Confirm Password" id="confirm-psw" required>
           
           <button type="submit" class="Btn">Sign Up Now</button>
           
@@ -32,5 +33,6 @@
       </div>
     </div>
   </div>
+  <script src="auth.js"></script>
 </body>
 </html>

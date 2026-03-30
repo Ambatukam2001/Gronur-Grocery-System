@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeModalIcon = document.getElementById('closeModalIcon');
   const modalTitle = document.getElementById('modalTitle');
 
-  let items = [
+  // Serverless Data Persistence
+  const defaultItems = [
     { name: 'Apples', brand: 'FreshFarm', price: 1.99, weight: '1kg', quantity: '1 units', store: 'Ambatogrocery', category: 'Produce', image: 'image/apple.png' },
     { name: 'Milk', brand: 'Organic Valley', price: 3.99, weight: '1L', quantity: '1 bottle', store: 'Ambatogrocery', category: 'Dairy', image: 'image/milk.png' },
     { name: 'Bananas', brand: 'FreshLand', price: 2.49, weight: '1kg', quantity: '3 bunches', store: 'Ambatogrocery', category: 'Produce', image: 'image/banana.png' },
@@ -31,8 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Chocolate', brand: 'FreshFarm', price: 12.79, weight: '2kg', quantity: '1 units', store: 'Ambatogrocery', category: 'Dairy', image: 'image/choco.png' },
   ];
 
+  let items = JSON.parse(localStorage.getItem('inventory')) || defaultItems;
   let cart = [];
   let editingIndex = null;
+
+  const saveInventory = () => localStorage.setItem('inventory', JSON.stringify(items));
 
   function displayItems(filteredItems = items) {
     itemsContainer.innerHTML = '';
@@ -129,6 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         newItemData.image = imageUrl || 'image/banana.png';
         items.push(newItemData);
       }
+      saveInventory();
       displayItems(); 
       closeEditForm();
     };
@@ -160,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function removeItem(index) {
     if (confirm('Are you sure you want to delete this product?')) {
       items.splice(index, 1);
+      saveInventory();
       displayItems();
     }
   }
@@ -228,10 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   cartItems.addEventListener('click', (e) => {
-    if (e.target.classList.contains('remove-from-cart-btn')) {
-      const index = e.target.getAttribute('data-index');
-      removeFromCart(index);
-    }
+    const btn = e.target.closest('button');
+    if (!btn || !btn.classList.contains('remove-from-cart-btn')) return;
+    removeFromCart(btn.getAttribute('data-index'));
   });
 
   sortOptions.addEventListener('change', (e) => sortItems(e.target.value));
